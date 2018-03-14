@@ -34,13 +34,6 @@ for document in files:
         read_document = single_document.read().replace('\n', ' ')
     corpus = corpus + [read_document]    
 
-#es.index(index="test_index",doc_type="test_doc",id=1,body={'test':corpus[0]})
-test = es.index(index="test_index",doc_type="test_doc",id=1,body={'test':"Korea is a country"})
-es.index(index="test_index",doc_type="test_doc",id=2,body={'test':"Peter is from Korea."})
-query = es.search(index="test_index", q='Korea')
-results = es.search(index="test_index", doc_type = "test_doc", body={"query": {"term" : {'test': "Korea"}}})
-es.indices.delete(index="test_index")
-
 #Iterate over documents in corpus and index them
 i = 1
 for document in corpus:
