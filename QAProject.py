@@ -34,13 +34,6 @@ for document in files:
         read_document = single_document.read().replace('\n', ' ')
     corpus = corpus + [read_document]    
 
-#es.index(index="test_index",doc_type="test_doc",id=1,body={'test':corpus[0]})
-test = es.index(index="test_index",doc_type="test_doc",id=1,body={'test':"Korea is a country"})
-es.index(index="test_index",doc_type="test_doc",id=2,body={'test':"Peter is from Korea."})
-query = es.search(index="test_index", q='Korea')
-results = es.search(index="test_index", doc_type = "test_doc", body={"query": {"term" : {'test': "Korea"}}})
-es.indices.delete(index="test_index")
-
 #Iterate over documents in corpus and index them
 i = 1
 for document in corpus:
@@ -85,7 +78,7 @@ else:
 #USE ELASTICSEARCH TO FIND DOCUMENTS & SENTENCES CONTAINING QUESTION KEYWORDS
 import re
 
-#Create search term
+##For question type 1: "Who is the CEO of CompanyX?"
 if question_type == 1:
     question_keys_string = ''
     for word in question_filtered:
@@ -118,8 +111,6 @@ if question_type == 1:
         sentence_hit_ids += [query_sentences['hits']['hits'][hit_num]['_id']]
     
     # ANSWERING THE QUESTION
-    
-    #For question type 1: "Who is the CEO of CompanyX?"
     regex = '(?<='+question_filtered[1]+'\sCEO\s)[A-Z][a-z]+\s[A-Z][a-z]+'
     for sent_id in sentence_hit_ids:
         sentence = es.get(index='sentences',doc_type='sentence',id=int(sent_id))['_source']['sentence']
